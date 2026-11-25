@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 16:26:37</sys_created_on>
+        <sys_id>ea0ae49dc3f497105ca93fac05013175</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_783736_time_tr_0_time_entry_template.x_783736_time_tr_0.sr_manager</sys_name>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_security_acl display_value="x_783736_time_tr_0_time_entry_template">120ae49dc3f497105ca93fac05013160</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_ea0ae49dc3f497105ca93fac05013175</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 16:26:37</sys_updated_on>
+        <sys_user_role display_value="x_783736_time_tr_0.sr_manager" name="x_783736_time_tr_0.sr_manager">629204d5c3f097105ca93fac0501313b</sys_user_role>
+    </sys_security_acl_role>
+</record_update>

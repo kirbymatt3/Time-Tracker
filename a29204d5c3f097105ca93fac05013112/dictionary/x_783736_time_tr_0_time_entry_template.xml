@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="510ae09dc3f497105ca93fac050131f8" label="Time Entry Template" max_length="40" name="x_783736_time_tr_0_time_entry_template" type="collection">
+        <element label="Project" mandatory="true" max_length="32" name="project" reference="x_783736_time_tr_0_approved_project" type="reference"/>
+        <element label="Comment" max_length="500" name="comment" type="string"/>
+        <element display="true" label="Template Name" mandatory="true" max_length="100" name="template_name" type="string"/>
+        <element label="Hours" mandatory="true" max_length="38" name="hours" type="decimal"/>
+        <element label="Owner" mandatory="true" max_length="32" name="owner" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="owner"/>
+        </index>
+        <index name="index2">
+            <element name="project"/>
+        </index>
+    </element>
+</database>

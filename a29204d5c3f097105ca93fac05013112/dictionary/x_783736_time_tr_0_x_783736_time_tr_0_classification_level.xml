@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="edc1649dc3b497105ca93fac05013176" label="Classification Level" max_length="40" name="x_783736_time_tr_0_x_783736_time_tr_0_classification_level" type="collection">
+        <element label="Max Salary" max_length="40" name="max_salary" type="currency"/>
+        <element label="Min Salary" max_length="40" name="min_salary" type="currency"/>
+        <element display="true" label="Level Code" max_length="40" name="level_code" type="string"/>
+        <element label="Midpoint Salary" max_length="40" name="midpoint_salary" type="currency"/>
+    </element>
+</database>

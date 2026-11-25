@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="afe76099c3f497105ca93fac05013166" label="Time Entry" max_length="40" name="x_783736_time_tr_0_time_entry" type="collection">
+        <element label="Hours" mandatory="true" max_length="38" name="hours" type="decimal"/>
+        <element label="Comment" max_length="500" name="comment" type="string"/>
+        <element label="End Date" max_length="40" name="end_date" type="glide_date"/>
+        <element default="True" label="Skip Weekends" max_length="255" name="skip_weekends" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="Apply Template" max_length="32" name="apply_template" reference="x_783736_time_tr_0_time_entry_template" type="reference"/>
+        <element label="Team" max_length="32" name="team" reference="sys_user" type="reference"/>
+        <element label="Calculated Cost" max_length="40" name="calculated_cost" type="currency"/>
+        <element label="Hourly Rate Snapshot" max_length="40" name="hourly_rate_snapshot" type="currency"/>
+        <element label="Work Date" mandatory="true" max_length="40" name="work_date" type="glide_date"/>
+        <element label="Project" mandatory="true" max_length="32" name="project" reference="x_783736_time_tr_0_approved_project" type="reference"/>
+        <element default="False" label="Locked" max_length="255" name="locked" type="boolean"/>
+        <element choice="1" label="Daily Status" max_length="40" name="daily_status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Over Target" sequence="2" value="over_target"/>
+                <element inactive_on_update="false" label="On Target" sequence="1" value="on_target"/>
+                <element inactive_on_update="false" label="Under Target" sequence="0" value="under_target"/>
+            </choice>
+        </element>
+        <element label="Employee" mandatory="true" max_length="32" name="employee" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="employee"/>
+        </index>
+        <index name="index2">
+            <element name="project"/>
+        </index>
+        <index name="index3">
+            <element name="team"/>
+        </index>
+    </element>
+</database>
