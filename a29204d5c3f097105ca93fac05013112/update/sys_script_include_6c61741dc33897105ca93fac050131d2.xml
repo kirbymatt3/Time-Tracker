@@ -201,6 +201,40 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
 
         return JSON.stringify(result);
     },
+    /**
+     * 6. getManagedTeamIds
+     * Returns an array of Team Sys IDs where the given user is Group Manager (e.g., Adriana -> DPOS Team)
+     */
+    getManagedTeamIds: function(userId) {
+        var uid = userId || gs.getUserID();
+        var teams = [];
+        var grp = new GlideRecord('sys_user_group');
+        grp.addQuery('manager', uid);
+        grp.addNotNullQuery('parent'); // Team-level groups have a Parent (like DSRP)
+        grp.query();
+
+        while (grp.next()) {
+            teams.push(grp.getValue('sys_id'));
+        }
+        return teams;
+    },
+
+    /**
+     * 7. getDepartmentChildTeamIds
+     * Returns an array of all Team Sys IDs under any Parent Department managed by userId (e.g., Chris Henry -> DPOS Team & ERP)
+     */
+    getDepartmentChildTeamIds: function(userId) {
+        var uid = userId || gs.getUserID();
+        var childTeams = [];
+        var grp = new GlideRecord('sys_user_group');
+        grp.addQuery('parent.manager', uid); // Dot-walk: find teams whose parent's manager is this Senior Manager
+        grp.query();
+
+        while (grp.next()) {
+            childTeams.push(grp.getValue('sys_id'));
+        }
+        return childTeams;
+    },
 
     type: 'TimeTrackerUtils'
 });
@@ -209,13 +243,13 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-11-25 17:06:08</sys_created_on>
         <sys_id>6c61741dc33897105ca93fac050131d2</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>TimeTrackerUtils</sys_name>
         <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
         <sys_update_name>sys_script_include_6c61741dc33897105ca93fac050131d2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-11-25 19:24:19</sys_updated_on>
+        <sys_updated_on>2026-11-25 19:41:15</sys_updated_on>
     </sys_script_include>
 </record_update>

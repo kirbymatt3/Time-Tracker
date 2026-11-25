@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>true</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_783736_time_tr_0_time_entry</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Enforce Time Entry Visibility</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+    // Admins see everything with no filter
+    if (gs.hasRole('x_783736_time_tr_0.admin')) {
+        return;
+    }
+
+    var uid = gs.getUserID();
+    var utils = new x_783736_time_tr_0.TimeTrackerUtils();
+
+    // Senior Manager (e.g., Chris Henry): sees own entries + all child teams under DSRP (DPOS Team + ERP)
+    if (gs.hasRole('x_783736_time_tr_0.sr_manager')) {
+        var deptTeams = utils.getDepartmentChildTeamIds(uid);
+        if (deptTeams.length > 0) {
+            current.addEncodedQuery('employee=' + uid + '^ORteamIN' + deptTeams.join(','));
+        } else {
+            current.addQuery('employee', uid);
+        }
+        return;
+    }
+
+    // Team Manager (e.g., Adriana Diaconu): sees own entries + entries for their managed team (DPOS Team)
+    if (gs.hasRole('x_783736_time_tr_0.manager')) {
+        var myTeams = utils.getManagedTeamIds(uid);
+        if (myTeams.length > 0) {
+            current.addEncodedQuery('employee=' + uid + '^ORteamIN' + myTeams.join(','));
+        } else {
+            current.addQuery('employee', uid);
+        }
+        return;
+    }
+
+    // Standard Employee (e.g., Matt Kirby, Christian Smith): sees strictly their own entries
+    current.addQuery('employee', uid);
+
+})(current, previous);
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 19:44:59</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>07079151c37c97105ca93fac0501319e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Enforce Time Entry Visibility</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_script_07079151c37c97105ca93fac0501319e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 19:44:59</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=07079151c37c97105ca93fac0501319e"/>
+</record_update>
