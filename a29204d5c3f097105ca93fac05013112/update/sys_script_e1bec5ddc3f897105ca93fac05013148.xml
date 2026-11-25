@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_783736_time_tr_0_time_entry</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Split Multi-Day Bulk Entries</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+    // Convert Work Date (start) and End Date strings into ServiceNow GlideDateTime objects for date math
+    var startGdt = new GlideDateTime(current.getValue('work_date') + ' 00:00:00');
+    var endGdt = new GlideDateTime(current.getValue('end_date') + ' 00:00:00');
+    var skipWeekends = (current.getValue('skip_weekends') === '1');
+
+    // Safety check: if End Date is on or before Work Date, do nothing
+    if (endGdt.compareTo(startGdt) <= 0) {
+        return;
+    }
+
+    // Create a moving date pointer starting 1 day AFTER Work Date (since Work Date is already saved as current)
+    var iterGdt = new GlideDateTime(startGdt);
+    iterGdt.addDaysLocalTime(1);
+
+
+    // Loop day-by-day until our pointer passes End Date
+    while (iterGdt.compareTo(endGdt) <= 0) {
+        // getDayOfWeekLocalTime() returns 1=Mon ... 5=Fri, 6=Sat, 7=Sun
+        var dayOfWeek = iterGdt.getDayOfWeekLocalTime();
+        var isWeekend = (dayOfWeek === 6 || dayOfWeek === 7);
+
+        // Only insert a record if we are NOT skipping weekends, OR today is a weekday
+        if (!(skipWeekends && isWeekend)) {
+            var newEntry = new GlideRecord('x_783736_time_tr_0_time_entry');
+            newEntry.initialize(); // Prepares a blank record with default values
+            newEntry.setValue('employee', current.getValue('employee'));
+            newEntry.setValue('team', current.getValue('team'));
+            newEntry.setValue('project', current.getValue('project'));
+            newEntry.setValue('work_date', iterGdt.getDate().getByFormat('yyyy-MM-dd'));
+            newEntry.setValue('hours', current.getValue('hours'));
+            newEntry.setValue('comment', current.getValue('comment'));
+            newEntry.insert(); // Saves the new daily record (and fires Business Rules 2 & 3 automatically!)
+        }
+
+        // Move the date pointer forward by 1 day
+        iterGdt.addDaysLocalTime(1);
+    }
+
+    // Clear End Date on the original record so it cleanly represents just the first day
+    var selfGr = new GlideRecord('x_783736_time_tr_0_time_entry');
+    if (selfGr.get(current.getUniqueValue())) {
+        selfGr.setValue('end_date', '');
+        selfGr.setWorkflow(false); // Update silently without re-triggering rules
+        selfGr.update();
+    }
+
+})(current, previous);
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 19:07:41</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>e1bec5ddc3f897105ca93fac05013148</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Split Multi-Day Bulk Entries</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_script_e1bec5ddc3f897105ca93fac05013148</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 19:12:48</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=e1bec5ddc3f897105ca93fac05013148"/>
+</record_update>

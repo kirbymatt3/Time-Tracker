@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_783736_time_tr_0.TimeTrackerUtils</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <mobile_callable>false</mobile_callable>
+        <name>TimeTrackerUtils</name>
+        <sandbox_callable>true</sandbox_callable>
+        <script><![CDATA[// Creates a reusable JavaScript "Class" (blueprint of functions) named TimeTrackerUtils
+var TimeTrackerUtils = Class.create();
+
+// Connects our class to ServiceNow's AbstractAjaxProcessor so Client Scripts (browser) can talk to it
+TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+    /**
+     * 1. getAllowedProjectsQuery
+     * Called by the Reference Qualifier on the "Project" dropdown field.
+     * Builds a filter string (Encoded Query) so users only see active projects for their team.
+     */
+    getAllowedProjectsQuery: function(userId) {
+        // Use the passed-in userId, OR fall back to the currently logged-in user's ID
+        var uid = userId || gs.getUserID();
+
+        // Call our helper function below to get a list (Array) of team Sys IDs this user belongs to
+        var teamIds = this._getUserTimeTrackerTeams(uid);
+
+        // If the array length is 0, the user isn't on any team -> return an impossible filter so 0 projects show
+        if (teamIds.length === 0) {
+            return 'sys_idIN';
+        }
+
+        // .join(',') turns an array ['id1', 'id2'] into a comma-separated string 'id1,id2'
+        // Returns a ServiceNow filter string like: "active=true^teamINabc123def456"
+        return 'active=true^teamIN' + teamIds.join(',');
+    },
+
+    /**
+     * 2. _getUserTimeTrackerTeams (Helper function - underscore means "internal use")
+     * Looks up all groups a user belongs to and returns the Sys IDs of actual work teams (like DPOS Team).
+     */
+    _getUserTimeTrackerTeams: function(userId) {
+        // Create an empty Array (list) to store matching team Sys IDs
+        var teams = [];
+
+        // GlideRecord is ServiceNow's tool for querying database tables
+        // Here we query the Group Member table (sys_user_grmember)
+        var grMem = new GlideRecord('sys_user_grmember');
+        grMem.addQuery('user', userId); // Filter: WHERE user = userId
+        grMem.query();                  // Run the database search
+
+        // Loop through every group membership record found
+        while (grMem.next()) {
+            // "Dot-walk" from the membership record to the actual Group record
+            var grp = grMem.group.getRefRecord();
+
+            // Safety check: if the group doesn't exist or isn't valid, skip to the next loop iteration
+            if (!grp || !grp.isValidRecord()) {
+                continue;
+            }
+
+            // indexOf('Managers') === -1 checks that the word "Managers" is NOT in the group name
+            // && means "AND". grp.getValue('parent') checks that the group has a parent (like DSRP)
+            if (grp.getValue('name').indexOf('Managers') === -1 && grp.getValue('parent')) {
+                // .push() adds the group's Sys ID onto the end of our teams array
+                teams.push(grp.getValue('sys_id'));
+            }
+        }
+
+        return teams; // Send the list of team Sys IDs back to whoever called this function
+    },
+
+    /**
+     * 3. getUserHourlyRate
+     * Calculates an employee's hourly cost rate from their Classification Level's annual midpoint.
+     */
+    getUserHourlyRate: function(userId) {
+        var uid = userId || gs.getUserID();
+
+        // Look up the user record in the User (sys_user) table
+        var usr = new GlideRecord('sys_user');
+        if (!usr.get(uid)) {
+            return 0; // If user not found, return $0
+        }
+
+        // Get the Classification Level record linked to this user
+        var levelGr = usr.x_783736_time_tr_0_classification_level.getRefRecord();
+        if (!levelGr || !levelGr.isValidRecord()) {
+            return 0; // If user has no Classification Level assigned, return $0
+        }
+
+        // parseFloat() converts text like "95000.00" into a real decimal number we can do math on
+        // "|| 0" means "if it's blank/NaN, use 0 instead"
+        var midpoint = parseFloat(levelGr.getValue('midpoint_salary')) || 0;
+
+        // Backup math: if midpoint wasn't calculated yet, calculate it right now from min & max
+        if (midpoint <= 0) {
+            var minSal = parseFloat(levelGr.getValue('min_salary')) || 0;
+            var maxSal = parseFloat(levelGr.getValue('max_salary')) || 0;
+            midpoint = (minSal + maxSal) / 2;
+        }
+
+        // Check if the user's Compressed Schedule checkbox is true ('1' in ServiceNow database)
+        var isCompressed = (usr.getValue('x_783736_time_tr_0_compressed_schedule') === '1');
+
+        // Ternary operator: a compact if/else -> condition ? valueIfTrue : valueIfFalse
+        // 38.75 hrs * 52 weeks = 2015 annual hours | 35.0 hrs * 52 weeks = 1820 annual hours
+        var annualHours = isCompressed ? (38.75 * 52) : (35.0 * 52);
+
+        // Divide annual salary by annual hours to get hourly rate (avoiding divide-by-zero)
+        return annualHours > 0 ? (midpoint / annualHours) : 0;
+    },
+
+    /**
+     * 4. recalculateDailyStatus
+     * Adds up all hours a user logged on a single date and marks the day Under, On, or Over Target.
+     */
+    recalculateDailyStatus: function(userId, workDate) {
+        // Guard clause: if either input is missing, stop immediately
+        if (!userId || !workDate) {
+            return;
+        }
+
+        // Check if this user works a compressed schedule (7.75h/day) or standard schedule (7.0h/day)
+        var usr = new GlideRecord('sys_user');
+        var isCompressed = false;
+        if (usr.get(userId)) {
+            isCompressed = (usr.getValue('x_783736_time_tr_0_compressed_schedule') === '1');
+        }
+        var dailyTarget = isCompressed ? 7.75 : 7.0;
+
+        var totalHours = 0; // Running total of hours for this date
+        var entries = [];   // Array to remember all Time Entry Sys IDs on this date
+
+        // Query all Time Entries for this specific employee AND this specific date
+        var gr = new GlideRecord('x_783736_time_tr_0_time_entry');
+        gr.addQuery('employee', userId);
+        gr.addQuery('work_date', workDate);
+        gr.query();
+
+        while (gr.next()) {
+            // "+=" adds the current row's hours onto our running total
+            totalHours += parseFloat(gr.getValue('hours')) || 0;
+            entries.push(gr.getValue('sys_id'));
+        }
+
+        // Decide the status label based on totalHours vs dailyTarget
+        // Math.abs(...) < 0.001 safely compares decimal numbers (avoids JavaScript 7.0000001 rounding quirks)
+        var status = 'under_target';
+        if (Math.abs(totalHours - dailyTarget) < 0.001) {
+            status = 'on_target';
+        } else if (totalHours > dailyTarget) {
+            status = 'over_target';
+        }
+
+        // Standard "for" loop: runs once for every Sys ID saved in our "entries" array
+        for (var i = 0; i < entries.length; i++) {
+            var upd = new GlideRecord('x_783736_time_tr_0_time_entry');
+            if (upd.get(entries[i])) {
+                upd.setValue('daily_status', status);
+
+                // CRITICAL: setWorkflow(false) prevents Business Rules from firing again on this update,
+                // which stops an infinite loop!
+                upd.setWorkflow(false);
+                upd.update();
+            }
+        }
+    },
+
+    /**
+     * 5. getTemplateDetails
+     * Called by a Client Script (via GlideAjax) when a user selects a saved template on the form.
+     */
+    getTemplateDetails: function() {
+        // Read the template Sys ID sent over from the user's browser
+        var templateId = this.getParameter('sysparm_template_id');
+
+        // Create a JavaScript Object (key-value pairs) to hold our response data
+        var result = {
+            found: false,
+            project: '',
+            hours: '',
+            comment: ''
+        };
+
+        if (!templateId) {
+            // JSON.stringify turns a JS object into a text string so it can travel back to the browser
+            return JSON.stringify(result);
+        }
+
+        // Look up the chosen template record and copy its fields into our result object
+        var tmpl = new GlideRecord('x_783736_time_tr_0_time_template');
+        if (tmpl.get(templateId)) {
+            result.found = true;
+            result.project = tmpl.getValue('project');
+            result.hours = tmpl.getValue('hours');
+            result.comment = tmpl.getValue('comment');
+        }
+
+        return JSON.stringify(result);
+    },
+
+    type: 'TimeTrackerUtils'
+});
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 17:06:08</sys_created_on>
+        <sys_id>6c61741dc33897105ca93fac050131d2</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>TimeTrackerUtils</sys_name>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_script_include_6c61741dc33897105ca93fac050131d2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 19:24:19</sys_updated_on>
+    </sys_script_include>
+</record_update>

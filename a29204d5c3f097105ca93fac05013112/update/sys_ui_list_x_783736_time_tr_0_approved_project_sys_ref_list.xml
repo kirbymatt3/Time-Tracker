@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="x_783736_time_tr_0_approved_project" version="2" view="sys_ref_list">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>project_id</element>
+            <list_id display_value="x_783736_time_tr_0_approved_project" element="NULL" name="x_783736_time_tr_0_approved_project" parent="NULL" relationship="NULL" sys_domain="global" view="7c10f2738c1103100a22deb6dd2b4e04">bff08159c3b897105ca93fac050131ca</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-25 18:06:55</sys_created_on>
+            <sys_id>7ff08159c3b897105ca93fac050131cb</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-25 18:06:55</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>short_description</element>
+            <list_id display_value="x_783736_time_tr_0_approved_project" element="NULL" name="x_783736_time_tr_0_approved_project" parent="NULL" relationship="NULL" sys_domain="global" view="7c10f2738c1103100a22deb6dd2b4e04">bff08159c3b897105ca93fac050131ca</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-25 18:06:55</sys_created_on>
+            <sys_id>f3f08159c3b897105ca93fac050131cc</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-25 18:06:55</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>team</element>
+            <list_id display_value="x_783736_time_tr_0_approved_project" element="NULL" name="x_783736_time_tr_0_approved_project" parent="NULL" relationship="NULL" sys_domain="global" view="7c10f2738c1103100a22deb6dd2b4e04">bff08159c3b897105ca93fac050131ca</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-25 18:06:55</sys_created_on>
+            <sys_id>7bf08159c3b897105ca93fac050131cc</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-25 18:06:55</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>x_783736_time_tr_0_approved_project</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-25 18:06:55</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>bff08159c3b897105ca93fac050131ca</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_783736_time_tr_0_approved_project</sys_name>
+            <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+            <sys_update_name>sys_ui_list_x_783736_time_tr_0_approved_project_sys_ref_list</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-25 18:06:55</sys_updated_on>
+            <sys_user/>
+            <view display_value="Reference List" name="sys_ref_list">7c10f2738c1103100a22deb6dd2b4e04</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

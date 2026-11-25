@@ -6,11 +6,11 @@
         <element default="True" label="Skip Weekends" max_length="255" name="skip_weekends" type="boolean"/>
         <element attributes="edge_encryption_enabled=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
         <element label="Apply Template" max_length="32" name="apply_template" reference="x_783736_time_tr_0_time_entry_template" type="reference"/>
-        <element label="Team" max_length="32" name="team" reference="sys_user" type="reference"/>
+        <element label="Team" max_length="32" name="team" reference="sys_user_group" type="reference"/>
         <element label="Calculated Cost" max_length="40" name="calculated_cost" type="currency"/>
         <element label="Hourly Rate Snapshot" max_length="40" name="hourly_rate_snapshot" type="currency"/>
         <element label="Work Date" mandatory="true" max_length="40" name="work_date" type="glide_date"/>
-        <element label="Project" mandatory="true" max_length="32" name="project" reference="x_783736_time_tr_0_approved_project" type="reference"/>
+        <element label="Project" mandatory="true" max_length="32" name="project" reference="x_783736_time_tr_0_approved_project" reference_qual="javascript: new x_783736_time_tr_0.TimeTrackerUtils().getAllowedProjectsQuery(cu" type="reference" use_reference_qualifier="advanced"/>
         <element default="False" label="Locked" max_length="255" name="locked" type="boolean"/>
         <element choice="1" label="Daily Status" max_length="40" name="daily_status" type="choice">
             <choice>

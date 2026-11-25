@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_783736_time_tr_0_time_entry</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Populate Team and Cost Snapshot</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+    // Create an instance of our TimeTrackerUtils Script Include so we can call its functions
+    var utils = new x_783736_time_tr_0.TimeTrackerUtils();
+
+    // Only look up Team and Hourly Rate if this is a brand-new Time Entry OR the Employee changed
+    // This protects historical records so old entries don't change cost if someone gets promoted later!
+    if (current.isNewRecord() || current.employee.changes()) {
+        var empId = current.getValue('employee');
+
+        // Get the employee's team array (e.g., ['sys_id_of_DPOS_Team']) and stamp the first team
+        var teams = utils._getUserTimeTrackerTeams(empId);
+        if (teams.length > 0) {
+            current.setValue('team', teams[0]);
+        }
+
+        // Calculate the employee's hourly rate from their Classification Level & Schedule, and save a snapshot
+        var hourlyRate = utils.getUserHourlyRate(empId);
+        current.setValue('hourly_rate_snapshot', hourlyRate);
+    }
+
+    // Multiply hours worked by the stamped hourly rate to get total dollar cost for this entry
+    var hours = parseFloat(current.getValue('hours')) || 0;
+    var rate = parseFloat(current.getValue('hourly_rate_snapshot')) || 0;
+    current.setValue('calculated_cost', hours * rate);
+
+})(current, previous);
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 18:48:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>68b98555c3f897105ca93fac05013152</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Populate Team and Cost Snapshot</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_script_68b98555c3f897105ca93fac05013152</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 18:54:02</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=68b98555c3f897105ca93fac05013152"/>
+</record_update>
