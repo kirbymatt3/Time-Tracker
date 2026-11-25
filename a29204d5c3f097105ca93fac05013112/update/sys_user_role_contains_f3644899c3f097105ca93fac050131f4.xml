@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
+    <sys_user_role_contains action="INSERT_OR_UPDATE">
+        <contains display_value="x_783736_time_tr_0.user" name="x_783736_time_tr_0.user">2e9204d5c3f097105ca93fac05013163</contains>
+        <role display_value="x_783736_time_tr_0.manager" name="x_783736_time_tr_0.manager">e69204d5c3f097105ca93fac05013145</role>
+        <sys_class_name>sys_user_role_contains</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 13:42:19</sys_created_on>
+        <sys_id>f3644899c3f097105ca93fac050131f4</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_783736_time_tr_0.user.x_783736_time_tr_0.manager</sys_name>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_user_role_contains_f3644899c3f097105ca93fac050131f4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 13:42:19</sys_updated_on>
+    </sys_user_role_contains>
+</record_update>

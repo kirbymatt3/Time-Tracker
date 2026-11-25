@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
+    <sys_user_role_contains action="DELETE">
+        <contains display_value="x_783736_time_tr_0.manager" name="x_783736_time_tr_0.manager">e69204d5c3f097105ca93fac05013145</contains>
+        <role display_value="x_783736_time_tr_0.admin" name="x_783736_time_tr_0.admin">6e9204d5c3f097105ca93fac0501315a</role>
+        <sys_class_name>sys_user_role_contains</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 13:40:26</sys_created_on>
+        <sys_id>1c040c59c3f097105ca93fac05013108</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_783736_time_tr_0.manager.x_783736_time_tr_0.admin</sys_name>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_update_name>sys_user_role_contains_1c040c59c3f097105ca93fac05013108</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 13:40:26</sys_updated_on>
+    </sys_user_role_contains>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</application>
+        <file_path/>
+        <instance_id>a34ae54aebadc3945a2dfceacad0cd12</instance_id>
+        <instance_name>dev408599</instance_name>
+        <name>sys_user_role_contains_1c040c59c3f097105ca93fac05013108</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains"><sys_user_role_contains action="INSERT_OR_UPDATE"><contains display_value="x_783736_time_tr_0.manager" name="x_783736_time_tr_0.manager">e69204d5c3f097105ca93fac05013145</contains><role display_value="x_783736_time_tr_0.admin" name="x_783736_time_tr_0.admin">6e9204d5c3f097105ca93fac0501315a</role><sys_class_name>sys_user_role_contains</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-11-25 13:40:26</sys_created_on><sys_id>1c040c59c3f097105ca93fac05013108</sys_id><sys_mod_count>0</sys_mod_count><sys_name>x_783736_time_tr_0.manager.x_783736_time_tr_0.admin</sys_name><sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package><sys_policy/><sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope><sys_update_name>sys_user_role_contains_1c040c59c3f097105ca93fac05013108</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-11-25 13:40:26</sys_updated_on></sys_user_role_contains></record_update>]]></payload>
+        <payload_hash>211169361</payload_hash>
+        <record_name>x_783736_time_tr_0.manager.x_783736_time_tr_0.admin</record_name>
+        <reverted_from/>
+        <source>e29204d5c3f097105ca93fac05013117</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 13:40:26</sys_created_on>
+        <sys_id>5c040c59c3f097105ca93fac05013112</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1a212efabf20000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 13:40:26</sys_updated_on>
+        <type>Contained Role</type>
+        <update_guid>1c040c59ecf0971011dfe482135ac811</update_guid>
+        <update_guid_history>1c040c59ecf0971011dfe482135ac811:211169361</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-25 13:41:08</sys_created_on>
+        <sys_db_object display_value="" name="sys_user_role_contains">sys_user_role_contains</sys_db_object>
+        <sys_id>46d874a2e97041d0ba0313a3b0cc8e10</sys_id>
+        <sys_metadata>1c040c59c3f097105ca93fac05013108</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_783736_time_tr_0.manager.x_783736_time_tr_0.admin</sys_name>
+        <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
+        <sys_scope_delete display_value="">0833056d636341dd838202d3dcf77bd1</sys_scope_delete>
+        <sys_update_name>sys_user_role_contains_1c040c59c3f097105ca93fac05013108</sys_update_name>
+        <sys_update_version display_value="sys_user_role_contains_1c040c59c3f097105ca93fac05013108">5c040c59c3f097105ca93fac05013112</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-25 13:41:08</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
