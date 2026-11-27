@@ -8,7 +8,7 @@
         <description/>
         <mobile_callable>false</mobile_callable>
         <name>TimeTrackerUtils</name>
-        <sandbox_callable>true</sandbox_callable>
+        <sandbox_callable>false</sandbox_callable>
         <script><![CDATA[// Creates a reusable JavaScript "Class" (blueprint of functions) named TimeTrackerUtils
 var TimeTrackerUtils = Class.create();
 
@@ -176,6 +176,8 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
     getTemplateDetails: function() {
         // Read the template Sys ID sent over from the user's browser
         var templateId = this.getParameter('sysparm_template_id');
+		 // Logs the exact value received from the browser to System Logs
+		 gs.info('[TimeTrackerUtils] getTemplateDetails called with sysparm_template_id: ' + templateId);
 
         // Create a JavaScript Object (key-value pairs) to hold our response data
         var result = {
@@ -191,8 +193,10 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         }
 
         // Look up the chosen template record and copy its fields into our result object
-        var tmpl = new GlideRecord('x_783736_time_tr_0_time_template');
+        var tmpl = new GlideRecord('x_783736_time_tr_0_time_entry_template');
+		
         if (tmpl.get(templateId)) {
+			
             result.found = true;
             result.project = tmpl.getValue('project');
             result.hours = tmpl.getValue('hours');
@@ -236,6 +240,88 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         return childTeams;
     },
 
+    /**
+     * 8. createTemplateFromForm
+     * Called by the "Save as Template" UI Action via GlideAjax to insert a new template record.
+     */
+       createTemplateFromForm: function() {
+      
+        var tmplName = this.getParameter('sysparm_tmpl_name');
+        var projectId = this.getParameter('sysparm_project');
+        var hours = this.getParameter('sysparm_hours');
+        var comment = this.getParameter('sysparm_comment');
+
+       
+        if (!tmplName || !projectId || !hours) {
+            return '';
+        }
+
+        var tmpl = new GlideRecord('x_783736_time_tr_0_time_entry_template');
+        tmpl.initialize();
+        tmpl.setValue('template_name', tmplName);
+        tmpl.setValue('owner', gs.getUserID());
+        tmpl.setValue('project', projectId);
+        tmpl.setValue('hours', hours);
+        tmpl.setValue('comment', comment || '');
+
+        var newId = tmpl.insert();
+       
+        return newId ? newId.toString() : '';
+    },
+    /**
+     * 9. copyPreviousWeek
+     * Called by the "Copy Previous Week" List Banner Button via GlideAjax.
+     * Duplicates all of the current user's Time Entries from last week (+7 days).
+     */
+    copyPreviousWeek: function() {
+        var userId = gs.getUserID();
+
+        // Find Monday and Sunday of LAST week using scoped GlideDateTime
+        var today = new GlideDateTime();
+        var dayOfWeek = today.getDayOfWeekLocalTime(); // 1 = Mon ... 7 = Sun
+
+        var lastMonday = new GlideDateTime(today);
+        lastMonday.addDaysLocalTime(-(dayOfWeek + 6));
+        var startStr = lastMonday.getLocalDate().getValue();
+
+        var lastSunday = new GlideDateTime(lastMonday);
+        lastSunday.addDaysLocalTime(6);
+        var endStr = lastSunday.getLocalDate().getValue();
+
+        var prevGr = new GlideRecord('x_783736_time_tr_0_time_entry');
+        prevGr.addQuery('employee', userId);
+        prevGr.addQuery('work_date', '>=', startStr);
+        prevGr.addQuery('work_date', '<=', endStr);
+        prevGr.query();
+
+        var copiedCount = 0;
+
+        while (prevGr.next()) {
+            var shiftedDate = new GlideDateTime(prevGr.getValue('work_date') + ' 12:00:00');
+            shiftedDate.addDaysLocalTime(7);
+
+            var newEntry = new GlideRecord('x_783736_time_tr_0_time_entry');
+            newEntry.initialize();
+            newEntry.setValue('employee', userId);
+            newEntry.setValue('project', prevGr.getValue('project'));
+            newEntry.setValue('work_date', shiftedDate.getLocalDate().getValue());
+            newEntry.setValue('hours', prevGr.getValue('hours'));
+            newEntry.setValue('comment', prevGr.getValue('comment'));
+            newEntry.setValue('locked', false);
+
+            if (newEntry.insert()) {
+                copiedCount++;
+            }
+        }
+
+        return JSON.stringify({
+            count: copiedCount,
+            start: startStr,
+            end: endStr
+        });
+    },
+
+
     type: 'TimeTrackerUtils'
 });
 ]]></script>
@@ -243,13 +329,13 @@ TimeTrackerUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-11-25 17:06:08</sys_created_on>
         <sys_id>6c61741dc33897105ca93fac050131d2</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>15</sys_mod_count>
         <sys_name>TimeTrackerUtils</sys_name>
         <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
         <sys_update_name>sys_script_include_6c61741dc33897105ca93fac050131d2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-11-25 19:41:15</sys_updated_on>
+        <sys_updated_on>2026-11-26 21:02:01</sys_updated_on>
     </sys_script_include>
 </record_update>

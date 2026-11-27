@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl">
     <sys_security_acl action="INSERT_OR_UPDATE">
-        <active>false</active>
+        <active>true</active>
         <admin_overrides>true</admin_overrides>
         <advanced>false</advanced>
         <applies_to/>
@@ -17,14 +17,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-11-25 16:17:27</sys_created_on>
         <sys_id>e0f7e099c3f497105ca93fac05013168</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>x_783736_time_tr_0_time_entry</sys_name>
         <sys_package display_value="Time Tracker" source="x_783736_time_tr_0">a29204d5c3f097105ca93fac05013112</sys_package>
         <sys_policy/>
         <sys_scope display_value="Time Tracker">a29204d5c3f097105ca93fac05013112</sys_scope>
         <sys_update_name>sys_security_acl_e0f7e099c3f497105ca93fac05013168</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-11-25 19:53:07</sys_updated_on>
+        <sys_updated_on>2026-11-26 02:31:58</sys_updated_on>
         <type display_value="record">record</type>
     </sys_security_acl>
 </record_update>
